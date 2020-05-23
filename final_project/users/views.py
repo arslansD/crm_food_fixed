@@ -1,7 +1,7 @@
 from rest_framework import status
 from rest_framework.generics import ListCreateAPIView
 from rest_auth.registration.views import RegisterView as RView
-from rest_framework.permissions import IsAuthenticated
+from rest_framework.permissions import IsAdminUser
 from rest_framework.response import Response
 
 from core.mixins import CustomDeleteMixin, CustomUpdateMixin
@@ -11,7 +11,7 @@ from .models import Role, User
 
 class RoleViews(ListCreateAPIView, CustomDeleteMixin):
     """
-    Responsible for creating, listing and deleting course models
+    Responsible for creating, listing and deleting role instances
     """
     model = Role
     queryset = Role.objects.all()
@@ -30,7 +30,7 @@ class UserViews(ListCreateAPIView, CustomDeleteMixin, CustomUpdateMixin):
     """
     model = User
     queryset = User.objects.all()
-    permission_classes = (IsAuthenticated, )
+    permission_classes = (IsAdminUser, )
 
     def get_object(self):
         return self.custom_get_object()
@@ -63,7 +63,7 @@ class UserViews(ListCreateAPIView, CustomDeleteMixin, CustomUpdateMixin):
 
     def patch(self, request, *args, **kwargs):
         """
-        Responsible for 'PATCH' method defined in CustomUpdateMixin
+        Responsible for 'PATCH' (update) method defined in CustomUpdateMixin
         """
         return self.partial_update(request, *args, **kwargs)
 
